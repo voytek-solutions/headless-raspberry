@@ -1,0 +1,29 @@
+#!/bin/bash
+
+CMD="$(basename "${BASH_SOURCE[0]}")"
+# DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+function usage {
+	echo "${CMD} http://url.to/the/image.zip"
+}
+
+function main {
+	local url="${1}"
+	local image_filename
+
+	[[ -n "${url}" ]] || usage
+
+	mkdir -p img
+	curl -Lo img/raspbian.zip "${url}"
+
+	image_filename=$(unzip -l img/raspbian.zip | \
+		grep "\.img" | \
+		sed 's/.* //')
+
+	cd img && \
+		unzip raspbian.zip
+	mv "${image_filename}" raspbian.img
+	rm raspbian.zip
+}
+
+main "$@"

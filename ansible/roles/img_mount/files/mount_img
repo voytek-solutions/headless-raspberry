@@ -1,0 +1,31 @@
+#!/bin/bash
+
+function main {
+	local img_filename="${1}"
+	local fdisk_info
+	local img_units
+	local img_offset1
+	local img_offset2
+
+	fdisk_info=$(fdisk -l "${img_filename}")
+
+	img_units=$(echo "${fdisk_info}" \
+		| grep Units \
+		| sed -E 's/.* = (.*?) bytes/\1/')
+	img_offset1=$(echo "${fdisk_info}"\
+		| grep img1 \
+		| sed -E 's/.*img1 *([0-9]*).*/\1/')
+	img_offset2=$(echo "${fdisk_info}"\
+		| grep img2 \
+		| sed -E 's/.*img2 *([0-9]*).*/\1/')
+
+	mkdir -p /mnt/rpi-a8af184/boot
+	chmod 770 /mnt/rpi-a8af184/boot
+	mount -v -o offset=$((img_units * img_offset1)) -t vfat "${img_filename}" /mnt/rpi-a8af184/boot
+
+	mkdir -p /mnt/rpi-a8af184/main
+	chmod 770 /mnt/rpi-a8af184/main
+	mount -v -o offset=$((img_units * img_offset2)) -t ext4 "${img_filename}" /mnt/rpi-a8af184/main
+}
+
+main "$@"

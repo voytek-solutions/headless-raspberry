@@ -1,0 +1,19 @@
+---
+
+- name: Set hostname
+  become: yes
+  template:
+    src: etc/hostname.j2
+    dest: "/mnt/rpi-{{ raspbian_headless.id }}/main/etc/hostname"
+    owner: root
+    group: root
+    mode: u+rw,g+r,o+r
+
+- name: Set Wi Fi
+  become: yes
+  template:
+    src: wpa_supplicant.conf.j2
+    dest: "/mnt/rpi-{{ raspbian_headless.id }}/boot/wpa_supplicant.conf"
+    owner: root
+    group: root
+    mode: u+rw,g+r,o+r

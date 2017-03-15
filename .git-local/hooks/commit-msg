@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+
+import re
+import sys
+
+message = "\nCommit message not formatted correctly\n\n\
+Please make sure your commit message:\n\
+  * Starts with uppercase\n\
+  * First line (subject) is no longer then 60 character\n\
+  * Additional commit message needs to be separated from sobject with single empty line.\n\n"
+
+##
+# Max subject length: 60
+pattern = re.compile("^(\\[[A-Z]{1,6}-[0-9]{1,6}\\] )?([A-Z].{0,60})(\\n\\n(.|\\n)+\\n?)?$")
+message_file = sys.argv[1]
+
+with open(message_file, 'r') as commit_file:
+	if bool(pattern.match(commit_file.read())):
+		exit(0)
+	else:
+		sys.stderr.write(message)
+		exit(1)

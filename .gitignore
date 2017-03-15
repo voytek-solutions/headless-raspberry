@@ -1,0 +1,13 @@
+.DS_Store
+
+
+
+
+## Build, test, ...
+/.make
+/.venv
+/.vagrant
+/*.log
+/out
+/img
+*.retry
