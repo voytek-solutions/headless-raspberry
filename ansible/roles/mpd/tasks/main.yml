@@ -1,0 +1,27 @@
+---
+
+- name: Update apt
+  become: yes
+  apt:
+    cache_valid_time: 1800
+    update_cache: yes
+
+- name: Ensure dependencies
+  become: yes
+  package:
+    name: alsa-utils
+
+- name: Ensure APT MPD repository
+  become: yes
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - deb http://www.lesbonscomptes.com/upmpdcli/downloads/mpd-debian/ jessie main
+    - deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/mpd-debian/ jessie main
+
+- name: Install MPD
+  become: yes
+  package:
+    allow_unauthenticated: yes
+    name: mpd

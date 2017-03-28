@@ -1,0 +1,32 @@
+---
+
+- name: Ensure log2ram files
+  become: yes
+  copy:
+    dest: "{{ item.dest }}"
+    group: root
+    owner: root
+    src: "{{ item.src }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - dest: /etc/systemd/system/log2ram.service
+      mode: u=rw,g=r,o=r
+      src: log2ram.service
+    - dest: /usr/local/bin/log2ram
+      mode: u=rwx,g=rx,o=rx
+      src: log2ram
+
+- name: Enable log2ram
+  become: yes
+  service:
+    name: log2ram
+    enabled: yes
+    state: started
+
+- name: Setup cron for log writes
+  become: yes
+  cron:
+    user: root
+    name: write logs to disk
+    special_time: hourly
+    job: /usr/local/bin/log2ram write

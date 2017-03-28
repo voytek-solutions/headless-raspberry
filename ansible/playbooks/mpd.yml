@@ -1,0 +1,8 @@
+---
+
+- name: Build Rapberypi SD Card Image
+  hosts: "{{ hosts }}"
+
+  roles:
+    - role: log2ram
+    - role: mpd

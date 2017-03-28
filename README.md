@@ -22,8 +22,8 @@ The plan is to simply run `make build ID=a8af184 ROLE=mpd`.
 ## Random Commands
 
 ```
-# Get random 7 characters of md5 hash
-head -c24 /dev/urandom | md5 | head -c7
+# Get random PI hostname
+make new_hostname
 ```
 
 ```
