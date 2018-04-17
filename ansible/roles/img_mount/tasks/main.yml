@@ -1,10 +1,9 @@
 ---
 
-- name: Make a copy of current img
-  copy:
-    dest: "/vagrant/img/rpi-{{ img_mount.id | mandatory }}-{{ img_mount.image }}"
-    remote_src: yes
-    src: "/vagrant/img/{{ img_mount.image }}"
+- name:
+  assert:
+    that:
+      - img_mount.id is defined
 
 - name: Ensure scripts
   copy:
@@ -12,8 +11,8 @@
     mode: u+x,g+x,o+x
     src: mount_img
 
-- name: Mount boot and main partition
-  become: yes
-  command: "/tmp/mount_img /vagrant/img/rpi-{{ img_mount.id | mandatory }}-{{ img_mount.image }}"
-  args:
-    creates: /mnt/rpi-a8af184/main
+- include: mount.yml
+  when: img_mount.mounted
+
+- include: umount.yml
+  when: not img_mount.mounted

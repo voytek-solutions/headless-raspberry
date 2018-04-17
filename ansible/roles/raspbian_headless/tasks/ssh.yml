@@ -1,0 +1,41 @@
+---
+
+- name: Ensure SSH daemon configuration
+  become: yes
+  template:
+    src: etc/ssh/sshd_config.j2
+    dest: "/mnt/rpi-{{ raspbian_headless.id }}/main/etc/ssh/sshd_config"
+    mode: 0644
+    owner: root
+
+- name: Ensure pi user SSH directory
+  become: yes
+  file:
+    path: "/mnt/rpi-{{ raspbian_headless.id }}/main/home/pi/.ssh"
+    state: directory
+    mode: u+rwx,go-rwx
+    owner: ubuntu
+    group: ubuntu
+
+- name: Set authorized keys for pi user
+  become: yes
+  lineinfile:
+    owner: ubuntu
+    group: ubuntu
+    create: yes
+    dest: "/mnt/rpi-{{ raspbian_headless.id }}/main/home/pi/.ssh/authorized_keys"
+    line: "{{ lookup('file', lookup('env','PWD') + '/ansible/files/ssh/' + item + '.pub') }}"
+    mode: u+rw,g+r,o+r
+    state: present
+  with_items: "{{ raspbian_headless.authorized_keys }}"
+
+# raspbian image looks for "ssh" file in boot folder. If present ssh is
+# started and the file removed.
+- name: Enable SSH
+  become: yes
+  file:
+    dest: "/mnt/rpi-{{ raspbian_headless.id }}/boot/ssh"
+    owner: root
+    group: root
+    mode: u+rw,g+r,o+r
+    state: touch

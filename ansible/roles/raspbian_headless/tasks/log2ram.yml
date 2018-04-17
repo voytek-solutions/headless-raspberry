@@ -1,0 +1,10 @@
+---
+
+- name: download log2ram
+  get_url:
+    url: https://github.com/azlux/log2ram/archive/master.zip
+    dest: /tmp
+
+- name: unpack
+
+- name: install

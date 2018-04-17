@@ -2,3 +2,4 @@
 
 raspbian_headless:
   id: ~
+  networks: []

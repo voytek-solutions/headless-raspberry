@@ -4,7 +4,7 @@ rootDir = File.expand_path('.')
 Vagrant.configure(2) do |config|
 
 	config.vm.box = "ubuntu/xenial64"
-	config.vm.box_check_update = true
+	config.vm.box_check_update = false
 
 	config.ssh.forward_agent = true
 
@@ -29,6 +29,10 @@ Vagrant.configure(2) do |config|
 			'image_id' => ENV['RPI_ID'],
 			'role' => ENV['ROLE']
 		}
+		ansible.raw_arguments = [
+			"--extra-vars=@ansible/vars/projects/#{ENV['PROJECT']}.yml"
+		]
+
 		ansible.verbose = "#{ENV['VERBOSE']}" if ENV['VERBOSE']
 	end
 end

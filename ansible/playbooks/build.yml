@@ -11,3 +11,8 @@
     - role: raspbian_headless
       raspbian_headless:
         id: "{{ image_id }}"
+
+    - role: img_mount
+      img_mount:
+        id: "{{ image_id }}"
+        mounted: no

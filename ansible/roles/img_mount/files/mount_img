@@ -2,6 +2,7 @@
 
 function main {
 	local img_filename="${1}"
+	local mnt_base="${2}"
 	local fdisk_info
 	local img_units
 	local img_offset1
@@ -19,13 +20,13 @@ function main {
 		| grep img2 \
 		| sed -E 's/.*img2 *([0-9]*).*/\1/')
 
-	mkdir -p /mnt/rpi-a8af184/boot
-	chmod 770 /mnt/rpi-a8af184/boot
-	mount -v -o offset=$((img_units * img_offset1)) -t vfat "${img_filename}" /mnt/rpi-a8af184/boot
+	mkdir -p "${mnt_base}/boot"
+	chmod 770 "${mnt_base}/boot"
+	mount -v -o offset=$((img_units * img_offset1)) -t vfat "${img_filename}" "${mnt_base}/boot"
 
-	mkdir -p /mnt/rpi-a8af184/main
-	chmod 770 /mnt/rpi-a8af184/main
-	mount -v -o offset=$((img_units * img_offset2)) -t ext4 "${img_filename}" /mnt/rpi-a8af184/main
+	mkdir -p "${mnt_base}/main"
+	chmod 770 "${mnt_base}/main"
+	mount -v -o offset=$((img_units * img_offset2)) -t ext4 "${img_filename}" "${mnt_base}/main"
 }
 
 main "$@"

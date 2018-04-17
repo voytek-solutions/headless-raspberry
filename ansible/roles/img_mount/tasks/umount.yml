@@ -1,0 +1,9 @@
+---
+
+- name: Unmount main partition
+  become: yes
+  command: "umount /mnt/rpi-{{ img_mount.id }}/main"
+
+- name: Unmount boot partition
+  become: yes
+  command: "umount /mnt/rpi-{{ img_mount.id }}/boot"

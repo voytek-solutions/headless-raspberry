@@ -1,0 +1,9 @@
+---
+
+- name: Mount boot and main partition
+  become: yes
+  command: "/tmp/mount_img
+    /vagrant/img/rpi-{{ img_mount.id }}-{{ img_mount.image }}
+    /mnt/rpi-{{ img_mount.id }}"
+  args:
+    creates: "/mnt/rpi-{{ img_mount.id }}/main/etc"

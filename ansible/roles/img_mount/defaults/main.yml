@@ -3,3 +3,4 @@
 img_mount:
   id: ~
   image: raspbian.img
+  mounted: yes
